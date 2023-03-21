@@ -94,7 +94,6 @@ namespace MIDI_Editor
                 float yOffsetSlots = (float)Math.Floor((double)yOffset / (pixelsPerPitch));
                 float yOffsetPx = yOffset - (yOffsetSlots * (pixelsPerPitch));
 
-                //tohle jsem si psal sám, je to asi poznat tím jak je to nepřehledný
 
                 if (sph > 24)
                 {
