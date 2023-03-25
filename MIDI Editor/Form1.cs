@@ -13,14 +13,12 @@ namespace MIDI_Editor
 
         public MidiFile mf = new MidiFile(sDefaultPath, true);
 
-        public float pixelsPerTick = 0.5F;
-        public float sph = 12;
-        //sph = slots per height (počet políček na výšku panelu)
-        public int noteSlotSize = 16;
+        public float pixPerTick = 0.5f;
+        public float sph = 24;
+        public int slotWidth = 16;
         public int xOffset = 0;
-        public int yOffset = 5000;
-        // noteSlotSize = 16 znamená, že jedno okénko gridu značí čtvrťovou notu (quarter note)
-        // respektive 16 1/64 not (nejmenších možných)
+        public int yOffset = 40;
+        string[] noteNames = new string[128];
 
         public Form1()
         {
@@ -28,12 +26,32 @@ namespace MIDI_Editor
 
             hScrollBar1.Value = xOffset;
             vScrollBar1.Value = yOffset;
-            trackBar1.Value = (int)(pixelsPerTick * 100);
-            trackBar2.Value = (int)sph;
+            trackBar1.Value = (int)(pixPerTick * 100);
             comboBox1.SelectedIndex = 4;
+
+
+            for (int i = 0; i <= 127; i += 12)
+            {
+                noteNames[i] = $"C{i / 12}";
+                noteNames[i + 1] = $"C#{i / 12}";
+                noteNames[i + 2] = $"D{i / 12}";
+                noteNames[i + 3] = $"D#{i / 12}";
+                noteNames[i + 4] = $"E{i / 12}";
+                noteNames[i + 5] = $"F{i / 12}";
+                noteNames[i + 6] = $"F#{i / 12}";
+                noteNames[i + 7] = $"G{i / 12}";
+
+                if(i != 120)
+                {
+                    noteNames[i + 8] = $"G#{i / 12}";
+                    noteNames[i + 9] = $"A{i / 12}";
+                    noteNames[i + 10] = $"A#{i / 12}";
+                    noteNames[i + 11] = $"B{i / 12}";
+                }
+            }
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
 
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -58,7 +76,7 @@ namespace MIDI_Editor
             }
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
@@ -72,58 +90,9 @@ namespace MIDI_Editor
             }
         }
 
-        private void Panel1_Paint(object sender, PaintEventArgs e)
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.Black);
-
-            using (Pen penW = new Pen(Color.White))
-            using (Pen penG = new Pen (Color.Gray))
-            {
-                float DeltaTicksPer64thNote = mf.DeltaTicksPerQuarterNote / 16;
-                float pixelsPerSlot = DeltaTicksPer64thNote * pixelsPerTick * noteSlotSize;
-                float spw = panel1.Width / pixelsPerSlot;
-                // SPW = slots per width (počet políček na šířku panelu)
-                float xSlotsZoomedOut = (panel1.Width / (float)(mf.DeltaTicksPerQuarterNote / 100F * noteSlotSize / 16));
-                xOffset = (int)(xSlotsZoomedOut * hScrollBar1.Value / 10000 * pixelsPerSlot);
-                float xOffsetSlots = (float)Math.Floor((double)(xOffset / pixelsPerSlot));
-                float xOffsetPx = xOffset - (xOffsetSlots * pixelsPerSlot);
-
-                float pixelsPerPitch = panel1.Height / sph;
-                float ySlotsZoomedOut = 127;
-                yOffset = (int)(ySlotsZoomedOut * vScrollBar1.Value / 10000 * (pixelsPerPitch));
-                float yOffsetSlots = (float)Math.Floor((double)yOffset / (pixelsPerPitch));
-                float yOffsetPx = yOffset - (yOffsetSlots * (pixelsPerPitch));
-
-
-                if (sph > 24)
-                {
-                    for (int i = 0; i <= (int)sph; i++)
-                    {
-                        e.Graphics.DrawLine(penG, 50, 12 * i * (pixelsPerPitch), panel1.Width, 12 * i * (pixelsPerPitch));
-                        e.Graphics.DrawLine(penW, 0, 12 * i * (pixelsPerPitch), 50, 12 * i * (pixelsPerPitch));
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i <= (int)sph; i++)
-                    {
-                        e.Graphics.DrawLine(penG, 50, i * (pixelsPerPitch) + (pixelsPerPitch - yOffsetPx), panel1.Width, i * (pixelsPerPitch) + ((pixelsPerPitch) - yOffsetPx));
-                        e.Graphics.DrawLine(penW, 0, i * (pixelsPerPitch) + (pixelsPerPitch - yOffsetPx), 50, i * (pixelsPerPitch) + ((pixelsPerPitch) - yOffsetPx));
-                    }
-                }
-
-                e.Graphics.DrawLine(penW, 50, 0, 50, panel1.Height);
-
-                if (pixelsPerTick * noteSlotSize >= 0.9)
-                // prostě kontroluje, aby na sebe nebyly sloupce gridu moc nahuštěný
-                {
-                    
-                    for (int i = 0; i <= (spw + 1); i++)
-                    {
-                        e.Graphics.DrawLine(penG, 50 + i * pixelsPerSlot + (pixelsPerSlot - xOffsetPx), 0, 50 + i * pixelsPerSlot + (pixelsPerSlot - xOffsetPx), panel1.Height);
-                    }
-                }
-            }
 
             foreach (var track in mf.Events)
             {
@@ -133,42 +102,85 @@ namespace MIDI_Editor
                     {
                         NoteOnEvent noteOnEvent = (NoteOnEvent)midiEvent;
 
-                        int x = (int)(noteOnEvent.AbsoluteTime * pixelsPerTick);
-                        int y = (int)(panel1.Height / sph * noteOnEvent.NoteNumber);
-                        int width = (int)(noteOnEvent.NoteLength * pixelsPerTick);
+                        int x = (int)(noteOnEvent.AbsoluteTime * pixPerTick);
+                        int y = (int)(panel1.Height / sph * (127 - noteOnEvent.NoteNumber - yOffset));
+                        int width = (int)(noteOnEvent.NoteLength * pixPerTick);
                         int height = (int)(panel1.Height / sph);
-                        e.Graphics.FillRectangle(Brushes.Green, 51 + x - xOffset, 1 + y - yOffset, width, height);
+                        e.Graphics.FillRectangle(Brushes.Green, x + 40 - xOffset, y, width, height);
+                    }
+                }
+            }
+
+            using (Pen penW = new Pen(Color.White))
+            using (Pen penG = new Pen(Color.Gray))
+            {
+                e.Graphics.DrawLine(penW, 40, 0, 40, panel1.Height);
+
+                double pixPerSlot = Math.Floor(slotWidth * pixPerTick * mf.DeltaTicksPerQuarterNote / 16);
+
+                for (int i = 0; i <= panel1.Width - 40; i++)
+                {
+                    e.Graphics.DrawLine(penG, 40 + (i * (int)pixPerSlot) - xOffset, 0, 40 + (i * (int)pixPerSlot) - xOffset, panel1.Height);
+                }
+
+                Font font = new Font(this.Font, FontStyle.Regular);
+
+                e.Graphics.FillRectangle(Brushes.Black, 0, 0, 40, panel1.Height);
+
+                for (int i = 0; i <= sph; i++)
+                {
+                    e.Graphics.DrawLine(penG, 40, 15 * i, panel1.Width, 15 * i);
+                    e.Graphics.DrawLine(penW, 0, 15 * i, 40, 15 * i);
+
+                    if (i + yOffset < noteNames.Length)
+                    {
+                        e.Graphics.DrawString(noteNames[127 - i - yOffset], font, Brushes.White, 5, 15 * i);
                     }
                 }
             }
         }
 
-        private void TrackBar1_Scroll(object sender, EventArgs e)
+        private void panel1_Click(object sender, EventArgs e)
         {
-            pixelsPerTick = trackBar1.Value / 100f;
+            Point clickPoint = panel1.PointToClient(Cursor.Position);
+            float selectedTime = clickPoint.X / pixPerTick;
+            int selectedSlot = (int)Math.Floor((double)clickPoint.Y / (panel1.Height / sph));
+            int selectedPitch = 127 - yOffset - selectedSlot;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            pixPerTick = trackBar1.Value / 100f;
             panel1.Refresh();
         }
 
-        private void TrackBar2_Scroll(object sender, EventArgs e)
+        private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            sph = trackBar2.Value;
+            xOffset = hScrollBar1.Value;
             panel1.Refresh();
         }
 
-        private void HScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
+            yOffset = vScrollBar1.Value;
             panel1.Refresh();
         }
 
-        private void VScrollBar1_Scroll(object sender, ScrollEventArgs e)
-        {
-            panel1.Refresh();
-        }
-
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {            
-            noteSlotSize = 1 * (int)Math.Pow(2, comboBox1.SelectedIndex);
+            slotWidth = 1 * (int)Math.Pow(2, comboBox1.SelectedIndex);
             panel1.Refresh();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            foreach (var track in mf.Events)
+            {
+                foreach (var midiEvent in track)
+                {
+                    MessageBox.Show(midiEvent.ToString());
+                }
+            }
         }
     }
 }
