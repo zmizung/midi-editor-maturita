@@ -18,7 +18,12 @@ namespace MIDI_Editor
         public int slotWidth = 16;
         public int xOffset = 0;
         public int yOffset = 40;
+
         string[] noteNames = new string[128];
+
+        public bool noteSelected = false;
+        int noteIndex = 0;
+        int eventIndex = 0;
 
         public Form1()
         {
@@ -28,7 +33,6 @@ namespace MIDI_Editor
             vScrollBar1.Value = yOffset;
             trackBar1.Value = (int)(pixPerTick * 100);
             comboBox1.SelectedIndex = 4;
-
 
             for (int i = 0; i <= 127; i += 12)
             {
@@ -48,6 +52,28 @@ namespace MIDI_Editor
                     noteNames[i + 10] = $"A#{i / 12}";
                     noteNames[i + 11] = $"B{i / 12}";
                 }
+            }
+        }
+
+        private void ShowNoteControls()
+        {
+            if (noteSelected)
+            {
+                button4.Show();
+                button5.Show();
+                button6.Show();
+                button7.Show();
+                button8.Show();
+                button9.Show();
+            }
+            else
+            {
+                button4.Hide();
+                button5.Hide();
+                button6.Hide();
+                button7.Hide();
+                button8.Hide();
+                button9.Hide();
             }
         }
 
@@ -74,6 +100,13 @@ namespace MIDI_Editor
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
+
+            if (mf.FileFormat == 1)
+            {
+                MessageBox.Show("Warning", "The selected MIDI file includes multiple tracks. The editor may not process it properly.", 0);
+            }
+
+            noteSelected = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -94,20 +127,29 @@ namespace MIDI_Editor
         {
             e.Graphics.Clear(Color.Black);
 
-            foreach (var track in mf.Events)
-            {
-                foreach (var midiEvent in track)
-                {
-                    if (MidiEvent.IsNoteOn(midiEvent))
-                    {
-                        NoteOnEvent noteOnEvent = (NoteOnEvent)midiEvent;
+            int index = 0;
 
-                        int x = (int)(noteOnEvent.AbsoluteTime * pixPerTick);
-                        int y = (int)(panel1.Height / sph * (127 - noteOnEvent.NoteNumber - yOffset));
-                        int width = (int)(noteOnEvent.NoteLength * pixPerTick);
-                        int height = (int)(panel1.Height / sph);
+            foreach (var midiEvent in mf.Events[0])
+            {
+                if (MidiEvent.IsNoteOn(midiEvent))
+                {
+                    NoteOnEvent noteOnEvent = (NoteOnEvent)midiEvent;
+
+                    int x = (int)(noteOnEvent.AbsoluteTime * pixPerTick);
+                    int y = (int)(panel1.Height / sph * (127 - noteOnEvent.NoteNumber - yOffset));
+                    int width = (int)(noteOnEvent.NoteLength * pixPerTick);
+                    int height = (int)(panel1.Height / sph);
+
+                    if (noteSelected && index == noteIndex)
+                    {
+                        e.Graphics.FillRectangle(Brushes.Purple, x + 40 - xOffset, y, width, height);
+                    }
+                    else
+                    {
                         e.Graphics.FillRectangle(Brushes.Green, x + 40 - xOffset, y, width, height);
                     }
+
+                    index++;
                 }
             }
 
@@ -143,9 +185,37 @@ namespace MIDI_Editor
         private void panel1_Click(object sender, EventArgs e)
         {
             Point clickPoint = panel1.PointToClient(Cursor.Position);
-            float selectedTime = clickPoint.X / pixPerTick;
+            float selectedTime = (clickPoint.X - 40 + xOffset) / pixPerTick;
             int selectedSlot = (int)Math.Floor((double)clickPoint.Y / (panel1.Height / sph));
             int selectedPitch = 127 - yOffset - selectedSlot;
+            string selectedNoteName = noteNames[selectedPitch];
+
+            int index = 0;
+            noteIndex = 0;
+            eventIndex = 0;
+
+            foreach (var midiEvent in mf.Events[0])
+            {
+                if (MidiEvent.IsNoteOn(midiEvent))
+                {
+                    NoteOnEvent noteOnEvent = (NoteOnEvent)midiEvent;
+
+                    if (noteOnEvent.AbsoluteTime <= selectedTime && noteOnEvent.AbsoluteTime + noteOnEvent.NoteLength >= selectedTime && noteOnEvent.NoteNumber == selectedPitch)
+                    {
+                        noteSelected = true;
+                        noteIndex = index;
+                        ShowNoteControls();
+                        panel1.Refresh();
+                        break;
+                    }
+
+                    index++;
+                    noteSelected = false;
+                    ShowNoteControls();
+                }
+                eventIndex++;
+            }
+            panel1.Refresh();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -181,6 +251,70 @@ namespace MIDI_Editor
                     MessageBox.Show(midiEvent.ToString());
                 }
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber != 127)
+            {
+                ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber++;
+                panel1.Refresh();
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber != 0)
+            {
+                ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber--;
+                panel1.Refresh();
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber <= 115)
+            {
+                ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber+=12;
+                panel1.Refresh();
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber >= 12)
+            {
+                ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber-=12;
+                panel1.Refresh();
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            int keepLength = ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength;
+
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).AbsoluteTime + (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16) < mf.DeltaTicksPerQuarterNote * 16 * 1024)
+            {
+                ((NoteOnEvent)mf.Events[0][eventIndex]).AbsoluteTime += (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16);
+            }
+
+            ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength = keepLength;
+            panel1.Refresh();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            int keepLength = ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength;
+
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).AbsoluteTime - (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16) >= 0)
+            {
+                ((NoteOnEvent)mf.Events[0][eventIndex]).AbsoluteTime -= (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16);
+            }
+
+            ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength = keepLength;
+
+            panel1.Refresh();
+
         }
     }
 }
