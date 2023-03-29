@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using NAudio.Midi;
 
@@ -10,7 +9,7 @@ namespace MIDI_Editor
     public partial class Form1 : Form
     {
         public static string defaultPath = Directory.GetCurrentDirectory() + "/New MIDI file.mid";
-        public static string selectedPath;
+        public static string selectedPath = Directory.GetCurrentDirectory() + "/backup.mid";
 
         public MidiFile mf = new MidiFile(defaultPath, true);
 
@@ -71,6 +70,8 @@ namespace MIDI_Editor
                 button8.Show();
                 button9.Show();
                 button11.Show();
+                button13.Show();
+                button14.Show();
             }
             else
             {
@@ -81,6 +82,8 @@ namespace MIDI_Editor
                 button8.Hide();
                 button9.Hide();
                 button11.Hide();
+                button13.Hide();
+                button14.Hide();
             }
         }
 
@@ -105,6 +108,7 @@ namespace MIDI_Editor
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                    selectedPath = Directory.GetCurrentDirectory() + "/backup.mid";
                 }
             }
 
@@ -213,24 +217,39 @@ namespace MIDI_Editor
 
                 newNoteOn.OffEvent = newNoteOff;
 
-                index = 0;
+                int onIndex = 0;
+                int offIndex = 0;
 
                 foreach (var midiEvent in mf.Events[0])
                 {
-                    if (midiEvent.AbsoluteTime == newNoteOn.AbsoluteTime)
+                    if (midiEvent.AbsoluteTime == newNoteOn.AbsoluteTime && MidiEvent.IsNoteOn(midiEvent))
                     {
-                        if (MidiEvent.IsNoteOn(midiEvent))
-                        {
-                            if (((NoteOnEvent)midiEvent).NoteNumber > newNoteOn.NoteNumber)
-                            {
-                                break;
-                            }
-                        }
+                        onIndex = index;
+                        break;
                     }
 
-                    if (midiEvent.AbsoluteTime > newNoteOn.AbsoluteTime)
+                    else if (midiEvent.AbsoluteTime > newNoteOn.AbsoluteTime)
                     {
+                        onIndex = index;
                         break;
+                    }
+
+                    else if (midiEvent.AbsoluteTime == newNoteOff.AbsoluteTime && MidiEvent.IsNoteOff(midiEvent))
+                    {
+                        offIndex = index;
+                        break;
+                    }
+
+                    else if (midiEvent.AbsoluteTime > newNoteOff.AbsoluteTime)
+                    {
+                        offIndex = index;
+                        break;
+                    }
+
+                    else
+                    {
+                        onIndex = index;
+                        offIndex = index;
                     }
 
                     index++;
@@ -241,8 +260,8 @@ namespace MIDI_Editor
                     mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime = newNoteOff.AbsoluteTime;
                 }
 
-                mf.Events[0].Insert(index - 1, newNoteOn);
-                mf.Events[0].Insert(index, newNoteOff);
+                mf.Events[0].Insert(onIndex, newNoteOn);
+                mf.Events[0].Insert(offIndex + 1, newNoteOff);
             }
             else
             {
@@ -297,7 +316,7 @@ namespace MIDI_Editor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string notesInfo = "";
+            string notesInfo = "If the events are not properly sorted, try saving the file." + Environment.NewLine + Environment.NewLine;
 
             foreach (var midiEvent in mf.Events[0])
             {
@@ -379,13 +398,43 @@ namespace MIDI_Editor
         {
             panel1.Cursor = Cursors.Hand;
             addingNote = true;
+            noteSelected = false;
+            ShowNoteControls();
         }
 
         private void button11_Click(object sender, EventArgs e)
         {
             mf.Events[0].RemoveAt(eventIndex);
             noteSelected = false;
+            ShowNoteControls();
             panel1.Refresh();
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            MidiFile.Export(selectedPath, mf.Events);
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength <= mf.DeltaTicksPerQuarterNote * 64)
+            {
+                ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength += (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16);
+            }
+
+            panel1.Refresh();
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            {
+                if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength > mf.DeltaTicksPerQuarterNote * slotWidth / 16)
+                {
+                    ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength -= (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16);
+                }
+
+                panel1.Refresh();
+            }
         }
     }
 }
