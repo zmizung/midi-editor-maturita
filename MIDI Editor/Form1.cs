@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using NAudio.Midi;
 
@@ -8,10 +9,10 @@ namespace MIDI_Editor
 {
     public partial class Form1 : Form
     {
-        public static string sDefaultPath = Directory.GetCurrentDirectory() + "/New MIDI file.mid";
-        public static string sSelectedPath;
+        public static string defaultPath = Directory.GetCurrentDirectory() + "/New MIDI file.mid";
+        public static string selectedPath;
 
-        public MidiFile mf = new MidiFile(sDefaultPath, true);
+        public MidiFile mf = new MidiFile(defaultPath, true);
 
         public float pixPerTick = 0.5f;
         public float sph = 24;
@@ -24,6 +25,10 @@ namespace MIDI_Editor
         public bool noteSelected = false;
         int noteIndex = 0;
         int eventIndex = 0;
+
+        public bool addingNote = false;
+
+        public int nearestSlot;
 
         public Form1()
         {
@@ -65,6 +70,7 @@ namespace MIDI_Editor
                 button7.Show();
                 button8.Show();
                 button9.Show();
+                button11.Show();
             }
             else
             {
@@ -74,6 +80,7 @@ namespace MIDI_Editor
                 button7.Hide();
                 button8.Hide();
                 button9.Hide();
+                button11.Hide();
             }
         }
 
@@ -90,7 +97,7 @@ namespace MIDI_Editor
             {
                 try
                 {
-                    sSelectedPath = openFileDialog.FileName;
+                    selectedPath = openFileDialog.FileName;
                     mf = new MidiFile(openFileDialog.FileName, true);
                     panel1.Refresh();
                     textBox1.Text = openFileDialog.FileName;
@@ -127,6 +134,9 @@ namespace MIDI_Editor
         {
             e.Graphics.Clear(Color.Black);
 
+            panel1.Cursor = Cursors.Default;
+            addingNote = false;
+
             int index = 0;
 
             foreach (var midiEvent in mf.Events[0])
@@ -156,14 +166,14 @@ namespace MIDI_Editor
             using (Pen penW = new Pen(Color.White))
             using (Pen penG = new Pen(Color.Gray))
             {
-                e.Graphics.DrawLine(penW, 40, 0, 40, panel1.Height);
-
                 double pixPerSlot = Math.Floor(slotWidth * pixPerTick * mf.DeltaTicksPerQuarterNote / 16);
 
                 for (int i = 0; i <= panel1.Width - 40; i++)
                 {
                     e.Graphics.DrawLine(penG, 40 + (i * (int)pixPerSlot) - xOffset, 0, 40 + (i * (int)pixPerSlot) - xOffset, panel1.Height);
                 }
+
+                e.Graphics.DrawLine(penW, 40, 0, 40, panel1.Height);
 
                 Font font = new Font(this.Font, FontStyle.Regular);
 
@@ -194,26 +204,69 @@ namespace MIDI_Editor
             noteIndex = 0;
             eventIndex = 0;
 
-            foreach (var midiEvent in mf.Events[0])
-            {
-                if (MidiEvent.IsNoteOn(midiEvent))
-                {
-                    NoteOnEvent noteOnEvent = (NoteOnEvent)midiEvent;
+            nearestSlot = (int)Math.Floor((double)selectedTime / mf.DeltaTicksPerQuarterNote * 16 / slotWidth);
 
-                    if (noteOnEvent.AbsoluteTime <= selectedTime && noteOnEvent.AbsoluteTime + noteOnEvent.NoteLength >= selectedTime && noteOnEvent.NoteNumber == selectedPitch)
+            if (addingNote)
+            {
+                NoteOnEvent newNoteOn = new NoteOnEvent(nearestSlot * mf.DeltaTicksPerQuarterNote * slotWidth / 16, 1, selectedPitch, 100, slotWidth * mf.DeltaTicksPerQuarterNote / 16);
+                NoteEvent newNoteOff = new NoteEvent(newNoteOn.AbsoluteTime + mf.DeltaTicksPerQuarterNote * slotWidth / 16, 1, MidiCommandCode.NoteOff, selectedPitch, 100);
+
+                newNoteOn.OffEvent = newNoteOff;
+
+                index = 0;
+
+                foreach (var midiEvent in mf.Events[0])
+                {
+                    if (midiEvent.AbsoluteTime == newNoteOn.AbsoluteTime)
                     {
-                        noteSelected = true;
-                        noteIndex = index;
-                        ShowNoteControls();
-                        panel1.Refresh();
+                        if (MidiEvent.IsNoteOn(midiEvent))
+                        {
+                            if (((NoteOnEvent)midiEvent).NoteNumber > newNoteOn.NoteNumber)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (midiEvent.AbsoluteTime > newNoteOn.AbsoluteTime)
+                    {
                         break;
                     }
 
                     index++;
-                    noteSelected = false;
-                    ShowNoteControls();
                 }
-                eventIndex++;
+
+                if (mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime < newNoteOff.AbsoluteTime)
+                {
+                    mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime = newNoteOff.AbsoluteTime;
+                }
+
+                mf.Events[0].Insert(index - 1, newNoteOn);
+                mf.Events[0].Insert(index, newNoteOff);
+            }
+            else
+            {
+                foreach (var midiEvent in mf.Events[0])
+                {
+                    if (MidiEvent.IsNoteOn(midiEvent))
+                    {
+                        NoteOnEvent noteOnEvent = (NoteOnEvent)midiEvent;
+
+                        if (noteOnEvent.AbsoluteTime <= selectedTime && noteOnEvent.AbsoluteTime + noteOnEvent.NoteLength >= selectedTime && noteOnEvent.NoteNumber == selectedPitch)
+                        {
+                            noteSelected = true;
+                            noteIndex = index;
+                            ShowNoteControls();
+                            panel1.Refresh();
+                            break;
+                        }
+
+                        index++;
+                        noteSelected = false;
+                        ShowNoteControls();
+                    }
+                    eventIndex++;
+                }
             }
             panel1.Refresh();
         }
@@ -244,13 +297,18 @@ namespace MIDI_Editor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            foreach (var track in mf.Events)
+            string notesInfo = "";
+
+            foreach (var midiEvent in mf.Events[0])
             {
-                foreach (var midiEvent in track)
-                {
-                    MessageBox.Show(midiEvent.ToString());
-                }
+                int i = 0;
+                notesInfo += midiEvent.ToString() + Environment.NewLine;
+                i++;
             }
+
+            MessageBox.Show(notesInfo);
+            
+            // inspirováno https://social.msdn.microsoft.com/Forums/vstudio/en-US/25963105-d8c1-4e98-987d-4a970a185afd/how-to-show-all-text-of-a-string-array-in-a-messageboxshow?forum=csharpgeneral
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -315,6 +373,19 @@ namespace MIDI_Editor
 
             panel1.Refresh();
 
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            panel1.Cursor = Cursors.Hand;
+            addingNote = true;
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            mf.Events[0].RemoveAt(eventIndex);
+            noteSelected = false;
+            panel1.Refresh();
         }
     }
 }

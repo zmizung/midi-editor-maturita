@@ -44,12 +44,14 @@ namespace MIDI_Editor
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(700, 38);
+            this.button1.Location = new System.Drawing.Point(12, 21);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 24);
             this.button1.TabIndex = 0;
@@ -59,7 +61,7 @@ namespace MIDI_Editor
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(700, 68);
+            this.button2.Location = new System.Drawing.Point(93, 21);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 24);
             this.button2.TabIndex = 1;
@@ -71,7 +73,7 @@ namespace MIDI_Editor
             // 
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.Black;
-            this.panel1.Location = new System.Drawing.Point(12, 38);
+            this.panel1.Location = new System.Drawing.Point(12, 91);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(640, 360);
             this.panel1.TabIndex = 2;
@@ -80,11 +82,11 @@ namespace MIDI_Editor
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(679, 363);
+            this.trackBar1.Location = new System.Drawing.Point(684, 65);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(109, 45);
+            this.trackBar1.Size = new System.Drawing.Size(104, 45);
             this.trackBar1.TabIndex = 4;
             this.trackBar1.Value = 1;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
@@ -92,7 +94,7 @@ namespace MIDI_Editor
             // hScrollBar1
             // 
             this.hScrollBar1.LargeChange = 25;
-            this.hScrollBar1.Location = new System.Drawing.Point(12, 401);
+            this.hScrollBar1.Location = new System.Drawing.Point(12, 454);
             this.hScrollBar1.Maximum = 4096;
             this.hScrollBar1.Name = "hScrollBar1";
             this.hScrollBar1.Size = new System.Drawing.Size(641, 17);
@@ -101,7 +103,7 @@ namespace MIDI_Editor
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 12);
+            this.textBox1.Location = new System.Drawing.Point(12, 65);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(641, 20);
             this.textBox1.TabIndex = 6;
@@ -109,10 +111,10 @@ namespace MIDI_Editor
             // 
             // vScrollBar1
             // 
-            this.vScrollBar1.Location = new System.Drawing.Point(659, 38);
+            this.vScrollBar1.Location = new System.Drawing.Point(659, 91);
             this.vScrollBar1.Maximum = 113;
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 370);
+            this.vScrollBar1.Size = new System.Drawing.Size(17, 360);
             this.vScrollBar1.TabIndex = 8;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
             // 
@@ -129,15 +131,15 @@ namespace MIDI_Editor
             "1 Bar",
             "2 Bars",
             "4 Bars"});
-            this.comboBox1.Location = new System.Drawing.Point(692, 121);
+            this.comboBox1.Location = new System.Drawing.Point(684, 24);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(91, 21);
+            this.comboBox1.Size = new System.Drawing.Size(104, 21);
             this.comboBox1.TabIndex = 9;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(700, 415);
+            this.button3.Location = new System.Drawing.Point(564, 21);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(88, 23);
             this.button3.TabIndex = 10;
@@ -147,7 +149,7 @@ namespace MIDI_Editor
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(700, 165);
+            this.button4.Location = new System.Drawing.Point(700, 185);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 11;
@@ -158,7 +160,7 @@ namespace MIDI_Editor
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(700, 194);
+            this.button5.Location = new System.Drawing.Point(700, 214);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 12;
@@ -169,7 +171,7 @@ namespace MIDI_Editor
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(700, 224);
+            this.button6.Location = new System.Drawing.Point(700, 243);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 13;
@@ -180,7 +182,7 @@ namespace MIDI_Editor
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(700, 254);
+            this.button7.Location = new System.Drawing.Point(700, 273);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 14;
@@ -191,7 +193,7 @@ namespace MIDI_Editor
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(700, 283);
+            this.button8.Location = new System.Drawing.Point(700, 302);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 15;
@@ -202,7 +204,7 @@ namespace MIDI_Editor
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(700, 313);
+            this.button9.Location = new System.Drawing.Point(700, 332);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(75, 23);
             this.button9.TabIndex = 16;
@@ -211,11 +213,34 @@ namespace MIDI_Editor
             this.button9.Visible = false;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(700, 116);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.TabIndex = 17;
+            this.button10.Text = "Add Note";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(700, 145);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(75, 23);
+            this.button11.TabIndex = 18;
+            this.button11.Text = "Delete Note";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Visible = false;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 482);
+            this.Controls.Add(this.button11);
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
@@ -231,6 +256,7 @@ namespace MIDI_Editor
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
@@ -256,6 +282,8 @@ namespace MIDI_Editor
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
     }
 }
 
