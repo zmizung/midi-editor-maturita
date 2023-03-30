@@ -72,6 +72,7 @@ namespace MIDI_Editor
                 button11.Show();
                 button13.Show();
                 button14.Show();
+                trackBar2.Show();
             }
             else
             {
@@ -84,6 +85,7 @@ namespace MIDI_Editor
                 button11.Hide();
                 button13.Hide();
                 button14.Hide();
+                trackBar2.Hide();
             }
         }
 
@@ -114,7 +116,7 @@ namespace MIDI_Editor
 
             if (mf.FileFormat == 1)
             {
-                MessageBox.Show("Warning", "The selected MIDI file includes multiple tracks. The editor may not process it properly.", 0);
+                MessageBox.Show("Warning", "The selected MIDI file includes multiple tracks. The editor may not process it properly.", MessageBoxButtons.OK);
             }
 
             noteSelected = false;
@@ -376,6 +378,14 @@ namespace MIDI_Editor
             }
 
             ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength = keepLength;
+
+            long offTime = ((NoteOnEvent)mf.Events[0][eventIndex]).AbsoluteTime + ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength;
+
+            if (offTime >= mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime)
+            {
+                mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime = offTime;
+            }
+
             panel1.Refresh();
         }
 
@@ -422,6 +432,13 @@ namespace MIDI_Editor
                 ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength += (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16);
             }
 
+            long offTime = ((NoteOnEvent)mf.Events[0][eventIndex]).AbsoluteTime + ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength;
+
+            if (offTime >= mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime)
+            {
+                mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime = offTime;
+            }
+
             panel1.Refresh();
         }
 
@@ -435,6 +452,21 @@ namespace MIDI_Editor
 
                 panel1.Refresh();
             }
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to remove all notes?", "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                mf = new MidiFile(defaultPath, true);
+                panel1.Refresh();
+            }
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            ((NoteOnEvent)mf.Events[0][eventIndex]).Velocity = trackBar2.Value;
+            ((NoteOnEvent)mf.Events[0][eventIndex]).OffEvent.Velocity = trackBar2.Value;
         }
     }
 }
