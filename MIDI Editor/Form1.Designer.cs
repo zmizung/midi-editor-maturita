@@ -29,106 +29,106 @@ namespace MIDI_Editor
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
-            this.button13 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
-            this.button15 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            this.OpenBtn = new System.Windows.Forms.Button();
+            this.SaveAsBtn = new System.Windows.Forms.Button();
+            this.GridPanel = new System.Windows.Forms.Panel();
+            this.ZoomX = new System.Windows.Forms.TrackBar();
+            this.ScrollBarX = new System.Windows.Forms.HScrollBar();
+            this.FileNameBox = new System.Windows.Forms.TextBox();
+            this.ScrollBarY = new System.Windows.Forms.VScrollBar();
+            this.SlotBox = new System.Windows.Forms.ComboBox();
+            this.InfoBtn = new System.Windows.Forms.Button();
+            this.NoteUp = new System.Windows.Forms.Button();
+            this.NoteDown = new System.Windows.Forms.Button();
+            this.OctUp = new System.Windows.Forms.Button();
+            this.OctDown = new System.Windows.Forms.Button();
+            this.NoteR = new System.Windows.Forms.Button();
+            this.NoteL = new System.Windows.Forms.Button();
+            this.NoteAdd = new System.Windows.Forms.Button();
+            this.NoteDel = new System.Windows.Forms.Button();
+            this.SaveBtn = new System.Windows.Forms.Button();
+            this.NoteExt = new System.Windows.Forms.Button();
+            this.NoteSho = new System.Windows.Forms.Button();
+            this.ResetBtn = new System.Windows.Forms.Button();
+            this.LabelZoom = new System.Windows.Forms.Label();
+            this.NoteVelo = new System.Windows.Forms.TrackBar();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NoteVelo)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // OpenBtn
             // 
-            this.button1.Location = new System.Drawing.Point(12, 21);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 24);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Open File";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.OpenBtn.Location = new System.Drawing.Point(12, 21);
+            this.OpenBtn.Name = "OpenBtn";
+            this.OpenBtn.Size = new System.Drawing.Size(75, 24);
+            this.OpenBtn.TabIndex = 0;
+            this.OpenBtn.Text = "Open File";
+            this.OpenBtn.UseVisualStyleBackColor = true;
+            this.OpenBtn.Click += new System.EventHandler(this.OpenBtn_Click);
             // 
-            // button2
+            // SaveAsBtn
             // 
-            this.button2.Location = new System.Drawing.Point(174, 21);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 24);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Save As";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.SaveAsBtn.Location = new System.Drawing.Point(174, 21);
+            this.SaveAsBtn.Name = "SaveAsBtn";
+            this.SaveAsBtn.Size = new System.Drawing.Size(75, 24);
+            this.SaveAsBtn.TabIndex = 1;
+            this.SaveAsBtn.Text = "Save As";
+            this.SaveAsBtn.UseVisualStyleBackColor = true;
+            this.SaveAsBtn.Click += new System.EventHandler(this.SaveAsBtn_Click);
             // 
-            // panel1
+            // GridPanel
             // 
-            this.panel1.AutoScroll = true;
-            this.panel1.BackColor = System.Drawing.Color.Black;
-            this.panel1.Location = new System.Drawing.Point(12, 91);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(640, 360);
-            this.panel1.TabIndex = 2;
-            this.panel1.Click += new System.EventHandler(this.panel1_Click);
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.GridPanel.AutoScroll = true;
+            this.GridPanel.BackColor = System.Drawing.Color.Black;
+            this.GridPanel.Location = new System.Drawing.Point(12, 91);
+            this.GridPanel.Name = "GridPanel";
+            this.GridPanel.Size = new System.Drawing.Size(640, 360);
+            this.GridPanel.TabIndex = 2;
+            this.GridPanel.Click += new System.EventHandler(this.GridPanel_Click);
+            this.GridPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.GridPanel_Paint);
             // 
-            // trackBar1
+            // ZoomX
             // 
-            this.trackBar1.Location = new System.Drawing.Point(684, 65);
-            this.trackBar1.Maximum = 100;
-            this.trackBar1.Minimum = 1;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(104, 45);
-            this.trackBar1.TabIndex = 4;
-            this.trackBar1.Value = 1;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.ZoomX.Location = new System.Drawing.Point(684, 65);
+            this.ZoomX.Maximum = 100;
+            this.ZoomX.Minimum = 1;
+            this.ZoomX.Name = "ZoomX";
+            this.ZoomX.Size = new System.Drawing.Size(104, 45);
+            this.ZoomX.TabIndex = 4;
+            this.ZoomX.Value = 1;
+            this.ZoomX.Scroll += new System.EventHandler(this.ZoomX_Scroll);
             // 
-            // hScrollBar1
+            // ScrollBarX
             // 
-            this.hScrollBar1.LargeChange = 25;
-            this.hScrollBar1.Location = new System.Drawing.Point(12, 454);
-            this.hScrollBar1.Maximum = 4096;
-            this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(641, 17);
-            this.hScrollBar1.TabIndex = 5;
-            this.hScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar1_Scroll);
+            this.ScrollBarX.LargeChange = 25;
+            this.ScrollBarX.Location = new System.Drawing.Point(12, 454);
+            this.ScrollBarX.Maximum = 4096;
+            this.ScrollBarX.Name = "ScrollBarX";
+            this.ScrollBarX.Size = new System.Drawing.Size(641, 17);
+            this.ScrollBarX.TabIndex = 5;
+            this.ScrollBarX.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ScrollBarX_Scroll);
             // 
-            // textBox1
+            // FileNameBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 65);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(641, 20);
-            this.textBox1.TabIndex = 6;
-            this.textBox1.Text = "Default (empty) MIDI file";
+            this.FileNameBox.Location = new System.Drawing.Point(12, 65);
+            this.FileNameBox.Name = "FileNameBox";
+            this.FileNameBox.Size = new System.Drawing.Size(641, 20);
+            this.FileNameBox.TabIndex = 6;
+            this.FileNameBox.Text = "Default (empty) MIDI file";
             // 
-            // vScrollBar1
+            // ScrollBarY
             // 
-            this.vScrollBar1.Location = new System.Drawing.Point(659, 91);
-            this.vScrollBar1.Maximum = 113;
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 360);
-            this.vScrollBar1.TabIndex = 8;
-            this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
+            this.ScrollBarY.Location = new System.Drawing.Point(659, 91);
+            this.ScrollBarY.Maximum = 113;
+            this.ScrollBarY.Name = "ScrollBarY";
+            this.ScrollBarY.Size = new System.Drawing.Size(17, 360);
+            this.ScrollBarY.TabIndex = 8;
+            this.ScrollBarY.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ScrollBarY_Scroll);
             // 
-            // comboBox1
+            // SlotBox
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.SlotBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.SlotBox.Items.AddRange(new object[] {
             "1/64",
             "1/32",
             "1/16",
@@ -138,203 +138,203 @@ namespace MIDI_Editor
             "1 Bar",
             "2 Bars",
             "4 Bars"});
-            this.comboBox1.Location = new System.Drawing.Point(684, 24);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(104, 21);
-            this.comboBox1.TabIndex = 9;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.SlotBox.Location = new System.Drawing.Point(684, 24);
+            this.SlotBox.Name = "SlotBox";
+            this.SlotBox.Size = new System.Drawing.Size(104, 21);
+            this.SlotBox.TabIndex = 9;
+            this.SlotBox.SelectedIndexChanged += new System.EventHandler(this.SlotBox_SelectedIndexChanged);
             // 
-            // button3
+            // InfoBtn
             // 
-            this.button3.Location = new System.Drawing.Point(564, 21);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(88, 23);
-            this.button3.TabIndex = 10;
-            this.button3.Text = "File Info";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.InfoBtn.Location = new System.Drawing.Point(564, 21);
+            this.InfoBtn.Name = "InfoBtn";
+            this.InfoBtn.Size = new System.Drawing.Size(88, 23);
+            this.InfoBtn.TabIndex = 10;
+            this.InfoBtn.Text = "File Info";
+            this.InfoBtn.UseVisualStyleBackColor = true;
+            this.InfoBtn.Click += new System.EventHandler(this.InfoBtn_Click);
             // 
-            // button4
+            // NoteUp
             // 
-            this.button4.Location = new System.Drawing.Point(700, 185);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 11;
-            this.button4.Text = "Note Up";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.NoteUp.Location = new System.Drawing.Point(700, 185);
+            this.NoteUp.Name = "NoteUp";
+            this.NoteUp.Size = new System.Drawing.Size(75, 23);
+            this.NoteUp.TabIndex = 11;
+            this.NoteUp.Text = "Note Up";
+            this.NoteUp.UseVisualStyleBackColor = true;
+            this.NoteUp.Visible = false;
+            this.NoteUp.Click += new System.EventHandler(this.NoteUp_Click);
             // 
-            // button5
+            // NoteDown
             // 
-            this.button5.Location = new System.Drawing.Point(700, 214);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 12;
-            this.button5.Text = "Note Down";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Visible = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.NoteDown.Location = new System.Drawing.Point(700, 214);
+            this.NoteDown.Name = "NoteDown";
+            this.NoteDown.Size = new System.Drawing.Size(75, 23);
+            this.NoteDown.TabIndex = 12;
+            this.NoteDown.Text = "Note Down";
+            this.NoteDown.UseVisualStyleBackColor = true;
+            this.NoteDown.Visible = false;
+            this.NoteDown.Click += new System.EventHandler(this.NoteDown_Click);
             // 
-            // button6
+            // OctUp
             // 
-            this.button6.Location = new System.Drawing.Point(700, 243);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 13;
-            this.button6.Text = "Oct Up";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Visible = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.OctUp.Location = new System.Drawing.Point(700, 243);
+            this.OctUp.Name = "OctUp";
+            this.OctUp.Size = new System.Drawing.Size(75, 23);
+            this.OctUp.TabIndex = 13;
+            this.OctUp.Text = "Oct Up";
+            this.OctUp.UseVisualStyleBackColor = true;
+            this.OctUp.Visible = false;
+            this.OctUp.Click += new System.EventHandler(this.OctUp_Click);
             // 
-            // button7
+            // OctDown
             // 
-            this.button7.Location = new System.Drawing.Point(700, 273);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(75, 23);
-            this.button7.TabIndex = 14;
-            this.button7.Text = "Oct Down";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Visible = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.OctDown.Location = new System.Drawing.Point(700, 273);
+            this.OctDown.Name = "OctDown";
+            this.OctDown.Size = new System.Drawing.Size(75, 23);
+            this.OctDown.TabIndex = 14;
+            this.OctDown.Text = "Oct Down";
+            this.OctDown.UseVisualStyleBackColor = true;
+            this.OctDown.Visible = false;
+            this.OctDown.Click += new System.EventHandler(this.OctDown_Click);
             // 
-            // button8
+            // NoteR
             // 
-            this.button8.Location = new System.Drawing.Point(700, 302);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 15;
-            this.button8.Text = "Note Right";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Visible = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.NoteR.Location = new System.Drawing.Point(700, 302);
+            this.NoteR.Name = "NoteR";
+            this.NoteR.Size = new System.Drawing.Size(75, 23);
+            this.NoteR.TabIndex = 15;
+            this.NoteR.Text = "Note Right";
+            this.NoteR.UseVisualStyleBackColor = true;
+            this.NoteR.Visible = false;
+            this.NoteR.Click += new System.EventHandler(this.NoteR_Click);
             // 
-            // button9
+            // NoteL
             // 
-            this.button9.Location = new System.Drawing.Point(700, 332);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(75, 23);
-            this.button9.TabIndex = 16;
-            this.button9.Text = "Note Left";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Visible = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.NoteL.Location = new System.Drawing.Point(700, 332);
+            this.NoteL.Name = "NoteL";
+            this.NoteL.Size = new System.Drawing.Size(75, 23);
+            this.NoteL.TabIndex = 16;
+            this.NoteL.Text = "Note Left";
+            this.NoteL.UseVisualStyleBackColor = true;
+            this.NoteL.Visible = false;
+            this.NoteL.Click += new System.EventHandler(this.NoteL_Click);
             // 
-            // button10
+            // NoteAdd
             // 
-            this.button10.Location = new System.Drawing.Point(700, 116);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 17;
-            this.button10.Text = "Add Note";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.NoteAdd.Location = new System.Drawing.Point(700, 116);
+            this.NoteAdd.Name = "NoteAdd";
+            this.NoteAdd.Size = new System.Drawing.Size(75, 23);
+            this.NoteAdd.TabIndex = 17;
+            this.NoteAdd.Text = "Add Note";
+            this.NoteAdd.UseVisualStyleBackColor = true;
+            this.NoteAdd.Click += new System.EventHandler(this.NoteAdd_Click);
             // 
-            // button11
+            // NoteDel
             // 
-            this.button11.Location = new System.Drawing.Point(700, 145);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(75, 23);
-            this.button11.TabIndex = 18;
-            this.button11.Text = "Delete Note";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Visible = false;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
+            this.NoteDel.Location = new System.Drawing.Point(700, 145);
+            this.NoteDel.Name = "NoteDel";
+            this.NoteDel.Size = new System.Drawing.Size(75, 23);
+            this.NoteDel.TabIndex = 18;
+            this.NoteDel.Text = "Delete Note";
+            this.NoteDel.UseVisualStyleBackColor = true;
+            this.NoteDel.Visible = false;
+            this.NoteDel.Click += new System.EventHandler(this.NoteDel_Click);
             // 
-            // button12
+            // SaveBtn
             // 
-            this.button12.Location = new System.Drawing.Point(93, 21);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(75, 23);
-            this.button12.TabIndex = 19;
-            this.button12.Text = "Save";
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
+            this.SaveBtn.Location = new System.Drawing.Point(93, 21);
+            this.SaveBtn.Name = "SaveBtn";
+            this.SaveBtn.Size = new System.Drawing.Size(75, 23);
+            this.SaveBtn.TabIndex = 19;
+            this.SaveBtn.Text = "Save";
+            this.SaveBtn.UseVisualStyleBackColor = true;
+            this.SaveBtn.Click += new System.EventHandler(this.SaveBtn_Click);
             // 
-            // button13
+            // NoteExt
             // 
-            this.button13.Location = new System.Drawing.Point(700, 361);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(75, 23);
-            this.button13.TabIndex = 20;
-            this.button13.Text = "Extend";
-            this.button13.UseVisualStyleBackColor = true;
-            this.button13.Visible = false;
-            this.button13.Click += new System.EventHandler(this.button13_Click);
+            this.NoteExt.Location = new System.Drawing.Point(700, 361);
+            this.NoteExt.Name = "NoteExt";
+            this.NoteExt.Size = new System.Drawing.Size(75, 23);
+            this.NoteExt.TabIndex = 20;
+            this.NoteExt.Text = "Extend";
+            this.NoteExt.UseVisualStyleBackColor = true;
+            this.NoteExt.Visible = false;
+            this.NoteExt.Click += new System.EventHandler(this.NoteExt_Click);
             // 
-            // button14
+            // NoteSho
             // 
-            this.button14.Location = new System.Drawing.Point(700, 390);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(75, 23);
-            this.button14.TabIndex = 21;
-            this.button14.Text = "Shorten";
-            this.button14.UseVisualStyleBackColor = true;
-            this.button14.Visible = false;
-            this.button14.Click += new System.EventHandler(this.button14_Click);
+            this.NoteSho.Location = new System.Drawing.Point(700, 390);
+            this.NoteSho.Name = "NoteSho";
+            this.NoteSho.Size = new System.Drawing.Size(75, 23);
+            this.NoteSho.TabIndex = 21;
+            this.NoteSho.Text = "Shorten";
+            this.NoteSho.UseVisualStyleBackColor = true;
+            this.NoteSho.Visible = false;
+            this.NoteSho.Click += new System.EventHandler(this.NoteSho_Click);
             // 
-            // button15
+            // ResetBtn
             // 
-            this.button15.Location = new System.Drawing.Point(456, 22);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(75, 23);
-            this.button15.TabIndex = 22;
-            this.button15.Text = "Reset";
-            this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
+            this.ResetBtn.Location = new System.Drawing.Point(456, 22);
+            this.ResetBtn.Name = "ResetBtn";
+            this.ResetBtn.Size = new System.Drawing.Size(75, 23);
+            this.ResetBtn.TabIndex = 22;
+            this.ResetBtn.Text = "Reset";
+            this.ResetBtn.UseVisualStyleBackColor = true;
+            this.ResetBtn.Click += new System.EventHandler(this.ResetBtn_Click);
             // 
-            // label1
+            // LabelZoom
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(719, 82);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 13);
-            this.label1.TabIndex = 23;
-            this.label1.Text = "Zoom";
+            this.LabelZoom.AutoSize = true;
+            this.LabelZoom.Location = new System.Drawing.Point(719, 82);
+            this.LabelZoom.Name = "LabelZoom";
+            this.LabelZoom.Size = new System.Drawing.Size(34, 13);
+            this.LabelZoom.TabIndex = 23;
+            this.LabelZoom.Text = "Zoom";
             // 
-            // trackBar2
+            // NoteVelo
             // 
-            this.trackBar2.Location = new System.Drawing.Point(684, 426);
-            this.trackBar2.Maximum = 127;
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(104, 45);
-            this.trackBar2.TabIndex = 24;
-            this.trackBar2.Visible = false;
-            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            this.NoteVelo.Location = new System.Drawing.Point(684, 426);
+            this.NoteVelo.Maximum = 127;
+            this.NoteVelo.Name = "NoteVelo";
+            this.NoteVelo.Size = new System.Drawing.Size(104, 45);
+            this.NoteVelo.TabIndex = 24;
+            this.NoteVelo.Visible = false;
+            this.NoteVelo.Scroll += new System.EventHandler(this.NoteVelo_Scroll);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(800, 482);
-            this.Controls.Add(this.trackBar2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button15);
-            this.Controls.Add(this.button14);
-            this.Controls.Add(this.button13);
-            this.Controls.Add(this.button12);
-            this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.vScrollBar1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.hScrollBar1);
-            this.Controls.Add(this.trackBar1);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.NoteVelo);
+            this.Controls.Add(this.LabelZoom);
+            this.Controls.Add(this.ResetBtn);
+            this.Controls.Add(this.NoteSho);
+            this.Controls.Add(this.NoteExt);
+            this.Controls.Add(this.SaveBtn);
+            this.Controls.Add(this.NoteDel);
+            this.Controls.Add(this.NoteAdd);
+            this.Controls.Add(this.NoteL);
+            this.Controls.Add(this.NoteR);
+            this.Controls.Add(this.OctDown);
+            this.Controls.Add(this.OctUp);
+            this.Controls.Add(this.NoteDown);
+            this.Controls.Add(this.NoteUp);
+            this.Controls.Add(this.InfoBtn);
+            this.Controls.Add(this.SlotBox);
+            this.Controls.Add(this.ScrollBarY);
+            this.Controls.Add(this.FileNameBox);
+            this.Controls.Add(this.ScrollBarX);
+            this.Controls.Add(this.ZoomX);
+            this.Controls.Add(this.GridPanel);
+            this.Controls.Add(this.SaveAsBtn);
+            this.Controls.Add(this.OpenBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ZoomX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NoteVelo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -342,29 +342,29 @@ namespace MIDI_Editor
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.HScrollBar hScrollBar1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.VScrollBar vScrollBar1;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button12;
-        private System.Windows.Forms.Button button13;
-        private System.Windows.Forms.Button button14;
-        private System.Windows.Forms.Button button15;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.Button OpenBtn;
+        private System.Windows.Forms.Button SaveAsBtn;
+        private System.Windows.Forms.Panel GridPanel;
+        private System.Windows.Forms.TrackBar ZoomX;
+        private System.Windows.Forms.HScrollBar ScrollBarX;
+        private System.Windows.Forms.TextBox FileNameBox;
+        private System.Windows.Forms.VScrollBar ScrollBarY;
+        private System.Windows.Forms.ComboBox SlotBox;
+        private System.Windows.Forms.Button InfoBtn;
+        private System.Windows.Forms.Button NoteUp;
+        private System.Windows.Forms.Button NoteDown;
+        private System.Windows.Forms.Button OctUp;
+        private System.Windows.Forms.Button OctDown;
+        private System.Windows.Forms.Button NoteR;
+        private System.Windows.Forms.Button NoteL;
+        private System.Windows.Forms.Button NoteAdd;
+        private System.Windows.Forms.Button NoteDel;
+        private System.Windows.Forms.Button SaveBtn;
+        private System.Windows.Forms.Button NoteExt;
+        private System.Windows.Forms.Button NoteSho;
+        private System.Windows.Forms.Button ResetBtn;
+        private System.Windows.Forms.Label LabelZoom;
+        private System.Windows.Forms.TrackBar NoteVelo;
     }
 }
 

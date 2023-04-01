@@ -19,7 +19,7 @@ namespace MIDI_Editor
         public int xOffset = 0;
         public int yOffset = 40;
 
-        string[] noteNames = new string[128];
+        readonly string[] noteNames = new string[128];
 
         public bool noteSelected = false;
         int noteIndex = 0;
@@ -33,10 +33,10 @@ namespace MIDI_Editor
         {
             InitializeComponent();
 
-            hScrollBar1.Value = xOffset;
-            vScrollBar1.Value = yOffset;
-            trackBar1.Value = (int)(pixPerTick * 100);
-            comboBox1.SelectedIndex = 4;
+            ScrollBarX.Value = xOffset;
+            ScrollBarY.Value = yOffset;
+            ZoomX.Value = (int)(pixPerTick * 100);
+            SlotBox.SelectedIndex = 4;
 
             for (int i = 0; i <= 127; i += 12)
             {
@@ -63,34 +63,34 @@ namespace MIDI_Editor
         {
             if (noteSelected)
             {
-                button4.Show();
-                button5.Show();
-                button6.Show();
-                button7.Show();
-                button8.Show();
-                button9.Show();
-                button11.Show();
-                button13.Show();
-                button14.Show();
-                trackBar2.Show();
-                trackBar2.Value = (((NoteOnEvent)mf.Events[0][eventIndex]).Velocity);
+                NoteUp.Show();
+                NoteDown.Show();
+                OctUp.Show();
+                OctDown.Show();
+                NoteR.Show();
+                NoteL.Show();
+                NoteDel.Show();
+                NoteExt.Show();
+                NoteSho.Show();
+                NoteVelo.Show();
+                NoteVelo.Value = (((NoteOnEvent)mf.Events[0][eventIndex]).Velocity);
             }
             else
             {
-                button4.Hide();
-                button5.Hide();
-                button6.Hide();
-                button7.Hide();
-                button8.Hide();
-                button9.Hide();
-                button11.Hide();
-                button13.Hide();
-                button14.Hide();
-                trackBar2.Hide();
+                NoteUp.Hide();
+                NoteDown.Hide();
+                OctUp.Hide();
+                OctDown.Hide();
+                NoteR.Hide();
+                NoteL.Hide();
+                NoteDel.Hide();
+                NoteExt.Hide();
+                NoteSho.Hide();
+                NoteVelo.Hide();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void OpenBtn_Click(object sender, EventArgs e)
 
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -103,14 +103,15 @@ namespace MIDI_Editor
             {
                 try
                 {
-                    selectedPath = openFileDialog.FileName;
                     mf = new MidiFile(openFileDialog.FileName, true);
-                    panel1.Refresh();
-                    textBox1.Text = openFileDialog.FileName;
+                    selectedPath = openFileDialog.FileName;
+                    GridPanel.Refresh();
+                    FileNameBox.Text = openFileDialog.FileName;
                 }
+
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                    MessageBox.Show("Unable to read file from disk. Original error: " + ex.Message);
                     selectedPath = Directory.GetCurrentDirectory() + "/backup.mid";
                 }
             }
@@ -122,10 +123,10 @@ namespace MIDI_Editor
 
             noteSelected = false;
             ShowNoteControls();
-            panel1.Refresh();
+            GridPanel.Refresh();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void SaveAsBtn_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
@@ -139,11 +140,11 @@ namespace MIDI_Editor
             }
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        private void GridPanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.Black);
 
-            panel1.Cursor = Cursors.Default;
+            GridPanel.Cursor = Cursors.Default;
             addingNote = false;
 
             int index = 0;
@@ -155,9 +156,9 @@ namespace MIDI_Editor
                     NoteOnEvent noteOnEvent = (NoteOnEvent)midiEvent;
 
                     int x = (int)(noteOnEvent.AbsoluteTime * pixPerTick);
-                    int y = (int)(panel1.Height / sph * (127 - noteOnEvent.NoteNumber - yOffset));
+                    int y = (int)(GridPanel.Height / sph * (127 - noteOnEvent.NoteNumber - yOffset));
                     int width = (int)(noteOnEvent.NoteLength * pixPerTick);
-                    int height = (int)(panel1.Height / sph);
+                    int height = (int)(GridPanel.Height / sph);
 
                     if (noteSelected && index == noteIndex)
                     {
@@ -177,20 +178,20 @@ namespace MIDI_Editor
             {
                 double pixPerSlot = Math.Floor(slotWidth * pixPerTick * mf.DeltaTicksPerQuarterNote / 16);
 
-                for (int i = 0; i <= panel1.Width - 40; i++)
+                for (int i = 0; i <= GridPanel.Width - 40; i++)
                 {
-                    e.Graphics.DrawLine(penG, 40 + (i * (int)pixPerSlot) - xOffset, 0, 40 + (i * (int)pixPerSlot) - xOffset, panel1.Height);
+                    e.Graphics.DrawLine(penG, 40 + (i * (int)pixPerSlot) - xOffset, 0, 40 + (i * (int)pixPerSlot) - xOffset, GridPanel.Height);
                 }
 
-                e.Graphics.DrawLine(penW, 40, 0, 40, panel1.Height);
+                e.Graphics.DrawLine(penW, 40, 0, 40, GridPanel.Height);
 
                 Font font = new Font(this.Font, FontStyle.Regular);
 
-                e.Graphics.FillRectangle(Brushes.Black, 0, 0, 40, panel1.Height);
+                e.Graphics.FillRectangle(Brushes.Black, 0, 0, 40, GridPanel.Height);
 
                 for (int i = 0; i <= sph; i++)
                 {
-                    e.Graphics.DrawLine(penG, 40, 15 * i, panel1.Width, 15 * i);
+                    e.Graphics.DrawLine(penG, 40, 15 * i, GridPanel.Width, 15 * i);
                     e.Graphics.DrawLine(penW, 0, 15 * i, 40, 15 * i);
 
                     if (i + yOffset < noteNames.Length)
@@ -201,11 +202,11 @@ namespace MIDI_Editor
             }
         }
 
-        private void panel1_Click(object sender, EventArgs e)
+        private void GridPanel_Click(object sender, EventArgs e)
         {
-            Point clickPoint = panel1.PointToClient(Cursor.Position);
+            Point clickPoint = GridPanel.PointToClient(Cursor.Position);
             float selectedTime = (clickPoint.X - 40 + xOffset) / pixPerTick;
-            int selectedSlot = (int)Math.Floor((double)clickPoint.Y / (panel1.Height / sph));
+            int selectedSlot = (int)Math.Floor((double)clickPoint.Y / (GridPanel.Height / sph));
             int selectedPitch = 127 - yOffset - selectedSlot;
 
             int index = 0;
@@ -266,7 +267,6 @@ namespace MIDI_Editor
 
                 mf.Events[0].Insert(onIndex, newNoteOn);
                 mf.Events[0].Insert(offIndex + 1, newNoteOff);
-                //využit zdroj https://stackoverflow.com/questions/10284952/c-sharp-way-to-add-value-in-a-listt-at-index
             }
             else
             {
@@ -281,7 +281,7 @@ namespace MIDI_Editor
                             noteSelected = true;
                             noteIndex = index;
                             ShowNoteControls();
-                            panel1.Refresh();
+                            GridPanel.Refresh();
                             break;
                         }
 
@@ -292,34 +292,34 @@ namespace MIDI_Editor
                     eventIndex++;
                 }
             }
-            panel1.Refresh();
+            GridPanel.Refresh();
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void ZoomX_Scroll(object sender, EventArgs e)
         {
-            pixPerTick = trackBar1.Value / 100f;
-            panel1.Refresh();
+            pixPerTick = ZoomX.Value / 100f;
+            GridPanel.Refresh();
         }
 
-        private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        private void ScrollBarX_Scroll(object sender, ScrollEventArgs e)
         {
-            xOffset = hScrollBar1.Value;
-            panel1.Refresh();
+            xOffset = ScrollBarX.Value;
+            GridPanel.Refresh();
         }
 
-        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        private void ScrollBarY_Scroll(object sender, ScrollEventArgs e)
         {
-            yOffset = vScrollBar1.Value;
-            panel1.Refresh();
+            yOffset = ScrollBarY.Value;
+            GridPanel.Refresh();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void SlotBox_SelectedIndexChanged(object sender, EventArgs e)
         {            
-            slotWidth = 1 * (int)Math.Pow(2, comboBox1.SelectedIndex);
-            panel1.Refresh();
+            slotWidth = 1 * (int)Math.Pow(2, SlotBox.SelectedIndex);
+            GridPanel.Refresh();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void InfoBtn_Click(object sender, EventArgs e)
         {
             string notesInfo = "If the events are not properly sorted, try saving the file." + Environment.NewLine + Environment.NewLine;
 
@@ -329,47 +329,45 @@ namespace MIDI_Editor
             }
 
             MessageBox.Show(notesInfo);
-            
-            //postup převzat z https://social.msdn.microsoft.com/Forums/vstudio/en-US/25963105-d8c1-4e98-987d-4a970a185afd/how-to-show-all-text-of-a-string-array-in-a-messageboxshow?forum=csharpgeneral
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void NoteUp_Click(object sender, EventArgs e)
         {
             if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber != 127)
             {
                 ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber++;
-                panel1.Refresh();
+                GridPanel.Refresh();
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void NoteDown_Click(object sender, EventArgs e)
         {
             if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber != 0)
             {
                 ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber--;
-                panel1.Refresh();
+                GridPanel.Refresh();
             }
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void OctUp_Click(object sender, EventArgs e)
         {
             if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber <= 115)
             {
                 ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber+=12;
-                panel1.Refresh();
+                GridPanel.Refresh();
             }
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void OctDown_Click(object sender, EventArgs e)
         {
             if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber >= 12)
             {
                 ((NoteOnEvent)mf.Events[0][eventIndex]).NoteNumber-=12;
-                panel1.Refresh();
+                GridPanel.Refresh();
             }
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private void NoteR_Click(object sender, EventArgs e)
         {
             int keepLength = ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength;
 
@@ -387,10 +385,10 @@ namespace MIDI_Editor
                 mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime = offTime;
             }
 
-            panel1.Refresh();
+            GridPanel.Refresh();
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private void NoteL_Click(object sender, EventArgs e)
         {
             int keepLength = ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength;
 
@@ -401,33 +399,32 @@ namespace MIDI_Editor
 
             ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength = keepLength;
 
-            panel1.Refresh();
+            GridPanel.Refresh();
 
         }
 
-        private void button10_Click(object sender, EventArgs e)
+        private void NoteAdd_Click(object sender, EventArgs e)
         {
-            panel1.Cursor = Cursors.Hand;
+            GridPanel.Cursor = Cursors.Hand;
             addingNote = true;
             noteSelected = false;
             ShowNoteControls();
         }
 
-        private void button11_Click(object sender, EventArgs e)
+        private void NoteDel_Click(object sender, EventArgs e)
         {
             mf.Events[0].RemoveAt(eventIndex);
-            //využit zdroj https://stackoverflow.com/questions/10018957/how-to-remove-item-from-list-in-c
             noteSelected = false;
             ShowNoteControls();
-            panel1.Refresh();
+            GridPanel.Refresh();
         }
 
-        private void button12_Click(object sender, EventArgs e)
+        private void SaveBtn_Click(object sender, EventArgs e)
         {
             MidiFile.Export(selectedPath, mf.Events);
         }
 
-        private void button13_Click(object sender, EventArgs e)
+        private void NoteExt_Click(object sender, EventArgs e)
         {
             if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength < mf.DeltaTicksPerQuarterNote * 64)
             {
@@ -441,10 +438,10 @@ namespace MIDI_Editor
                 mf.Events[0][mf.Events[0].Count - 1].AbsoluteTime = offTime;
             }
 
-            panel1.Refresh();
+            GridPanel.Refresh();
         }
 
-        private void button14_Click(object sender, EventArgs e)
+        private void NoteSho_Click(object sender, EventArgs e)
         {
             {
                 if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength > mf.DeltaTicksPerQuarterNote * slotWidth / 16)
@@ -452,24 +449,23 @@ namespace MIDI_Editor
                     ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength -= (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16);
                 }
 
-                panel1.Refresh();
+                GridPanel.Refresh();
             }
         }
 
-        private void button15_Click(object sender, EventArgs e)
+        private void ResetBtn_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to remove all notes?", "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK)
-            // řádek převzat z https://social.msdn.microsoft.com/Forums/en-US/d9e89525-7133-41b7-8d30-0335d3e801f8/message-box-with-ok-and-cancel-buttons?forum=Vsexpressvcs
             {
                 mf = new MidiFile(defaultPath, true);
-                panel1.Refresh();
+                GridPanel.Refresh();
             }
         }
 
-        private void trackBar2_Scroll(object sender, EventArgs e)
+        private void NoteVelo_Scroll(object sender, EventArgs e)
         {
-            ((NoteOnEvent)mf.Events[0][eventIndex]).Velocity = trackBar2.Value;
-            ((NoteOnEvent)mf.Events[0][eventIndex]).OffEvent.Velocity = trackBar2.Value;
+            ((NoteOnEvent)mf.Events[0][eventIndex]).Velocity = NoteVelo.Value;
+            ((NoteOnEvent)mf.Events[0][eventIndex]).OffEvent.Velocity = NoteVelo.Value;
         }
     }
 }
