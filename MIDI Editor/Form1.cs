@@ -73,6 +73,7 @@ namespace MIDI_Editor
                 button13.Show();
                 button14.Show();
                 trackBar2.Show();
+                trackBar2.Value = (((NoteOnEvent)mf.Events[0][eventIndex]).Velocity);
             }
             else
             {
@@ -120,6 +121,8 @@ namespace MIDI_Editor
             }
 
             noteSelected = false;
+            ShowNoteControls();
+            panel1.Refresh();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -204,7 +207,6 @@ namespace MIDI_Editor
             float selectedTime = (clickPoint.X - 40 + xOffset) / pixPerTick;
             int selectedSlot = (int)Math.Floor((double)clickPoint.Y / (panel1.Height / sph));
             int selectedPitch = 127 - yOffset - selectedSlot;
-            string selectedNoteName = noteNames[selectedPitch];
 
             int index = 0;
             noteIndex = 0;
@@ -264,6 +266,7 @@ namespace MIDI_Editor
 
                 mf.Events[0].Insert(onIndex, newNoteOn);
                 mf.Events[0].Insert(offIndex + 1, newNoteOff);
+                //využit zdroj https://stackoverflow.com/questions/10284952/c-sharp-way-to-add-value-in-a-listt-at-index
             }
             else
             {
@@ -322,14 +325,12 @@ namespace MIDI_Editor
 
             foreach (var midiEvent in mf.Events[0])
             {
-                int i = 0;
                 notesInfo += midiEvent.ToString() + Environment.NewLine;
-                i++;
             }
 
             MessageBox.Show(notesInfo);
             
-            // inspirováno https://social.msdn.microsoft.com/Forums/vstudio/en-US/25963105-d8c1-4e98-987d-4a970a185afd/how-to-show-all-text-of-a-string-array-in-a-messageboxshow?forum=csharpgeneral
+            //postup převzat z https://social.msdn.microsoft.com/Forums/vstudio/en-US/25963105-d8c1-4e98-987d-4a970a185afd/how-to-show-all-text-of-a-string-array-in-a-messageboxshow?forum=csharpgeneral
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -415,6 +416,7 @@ namespace MIDI_Editor
         private void button11_Click(object sender, EventArgs e)
         {
             mf.Events[0].RemoveAt(eventIndex);
+            //využit zdroj https://stackoverflow.com/questions/10018957/how-to-remove-item-from-list-in-c
             noteSelected = false;
             ShowNoteControls();
             panel1.Refresh();
@@ -427,7 +429,7 @@ namespace MIDI_Editor
 
         private void button13_Click(object sender, EventArgs e)
         {
-            if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength <= mf.DeltaTicksPerQuarterNote * 64)
+            if (((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength < mf.DeltaTicksPerQuarterNote * 64)
             {
                 ((NoteOnEvent)mf.Events[0][eventIndex]).NoteLength += (int)(mf.DeltaTicksPerQuarterNote * slotWidth / 16);
             }
@@ -457,6 +459,7 @@ namespace MIDI_Editor
         private void button15_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to remove all notes?", "Warning", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            // řádek převzat z https://social.msdn.microsoft.com/Forums/en-US/d9e89525-7133-41b7-8d30-0335d3e801f8/message-box-with-ok-and-cancel-buttons?forum=Vsexpressvcs
             {
                 mf = new MidiFile(defaultPath, true);
                 panel1.Refresh();

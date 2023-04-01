@@ -295,9 +295,8 @@ namespace MIDI_Editor
             // trackBar2
             // 
             this.trackBar2.Location = new System.Drawing.Point(684, 426);
-            this.trackBar2.Maximum = 100;
+            this.trackBar2.Maximum = 127;
             this.trackBar2.Name = "trackBar2";
-            this.trackBar2.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.trackBar2.Size = new System.Drawing.Size(104, 45);
             this.trackBar2.TabIndex = 24;
             this.trackBar2.Visible = false;
