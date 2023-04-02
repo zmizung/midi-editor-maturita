@@ -413,7 +413,18 @@ namespace MIDI_Editor
 
         private void NoteDel_Click(object sender, EventArgs e)
         {
+            int offIndex = mf.Events[0].IndexOf(((NoteOnEvent)mf.Events[0][eventIndex]).OffEvent);
             mf.Events[0].RemoveAt(eventIndex);
+
+            if (offIndex < eventIndex)
+            {
+                mf.Events[0].RemoveAt(offIndex);
+            }
+            else
+            {
+                mf.Events[0].RemoveAt(offIndex - 1);
+            }
+
             noteSelected = false;
             ShowNoteControls();
             GridPanel.Refresh();
