@@ -136,7 +136,15 @@ namespace MIDI_Editor
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                MidiFile.Export(saveFileDialog.FileName, mf.Events);
+                try
+                {
+                    MidiFile.Export(saveFileDialog.FileName, mf.Events);
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Unable to save file. Is the file open in another program?. Original error: " + ex.Message);
+                }
             }
         }
 
@@ -315,7 +323,7 @@ namespace MIDI_Editor
 
         private void SlotBox_SelectedIndexChanged(object sender, EventArgs e)
         {            
-            slotWidth = 1 * (int)Math.Pow(2, SlotBox.SelectedIndex);
+            slotWidth = (int)Math.Pow(2, SlotBox.SelectedIndex);
             GridPanel.Refresh();
         }
 
